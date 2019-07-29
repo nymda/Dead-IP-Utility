@@ -66,9 +66,10 @@ namespace Dead_IP_Utility
                     string[] cur0 = IPs[i].Split(',');
 
                     string cur;
-                    string port;
+                    string port = "";
                     string user;
                     string pass;
+
 
                     if(cur0.Length == 2)
                     {
@@ -84,7 +85,14 @@ namespace Dead_IP_Utility
                     {
                         //something else, probably ip:port
                         string[] ipporttemp = cur0[0].Split(':');
-                        port = ipporttemp[1];
+                        try
+                        {
+                            port = ipporttemp[1];
+                        }
+                        catch
+                        {
+
+                        }
                         cur = ipporttemp[0];
                     }
 

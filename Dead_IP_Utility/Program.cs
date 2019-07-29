@@ -26,6 +26,7 @@ namespace Dead_IP_Utility
                 Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("\nSpecify a file (or drag into executable).");
                 Console.WriteLine("Program will exit.");
+                Console.BackgroundColor = ConsoleColor.Black;
                 System.Threading.Thread.Sleep(5000);
                 Environment.Exit(0);
             }
@@ -61,8 +62,9 @@ namespace Dead_IP_Utility
 
                 for (int i = startpos; i < len; i++)
                 {
-
+                    
                     string[] cur0 = IPs[i].Split(',');
+
                     string cur;
                     string port;
                     string user;

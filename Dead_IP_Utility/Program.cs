@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,12 +14,12 @@ namespace Dead_IP_Utility
         {
             Console.WriteLine("Dead IP Testing Utility. Made by knedit.");
             Console.WriteLine("A backup of the origional file will be stored in %appdata%.");
-            Console.WriteLine("Overwriting will begin instantly.");
+            Console.WriteLine("Note: IPs that are up but refuse ping requests show as dead.");
             string back = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/DeadIpBackup.txt";
 
             try
             {
-                if (args[0] == ""){ }
+                if (args[0] == "") { }
             }
             catch
             {
@@ -27,13 +27,14 @@ namespace Dead_IP_Utility
                 Console.WriteLine("\nSpecify a file (or drag into executable).");
                 Console.WriteLine("Program will exit.");
                 Console.BackgroundColor = ConsoleColor.Black;
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(500);
                 Environment.Exit(0);
             }
 
             File.Copy(args[0], back, true);
 
             List<String> IPs = new List<String> { };
+            List<String> IPsMod = new List<String> { };
             List<String> good = new List<String> { };
 
             int count = 0;
@@ -62,14 +63,13 @@ namespace Dead_IP_Utility
 
                 for (int i = startpos; i < len; i++)
                 {
-                    
+
                     string[] cur0 = IPs[i].Split(',');
 
                     string cur;
                     string port = "";
                     string user;
                     string pass;
-
 
                     if(cur0.Length == 2)
                     {
@@ -97,21 +97,18 @@ namespace Dead_IP_Utility
                     }
 
                     Ping ping = new Ping();
-                    PingReply PR = ping.Send(cur, 500);
+                    PingReply PR = ping.Send(cur, 2000);
                     if(PR.Status.ToString().Equals("Success"))
                     {
                         //good ip
                         good.Add(cur + ":" + port);
-                        IPs[i] = cur + ":" + port;
-                        File.WriteAllLines(args[0], IPs.ToArray());
                         Console.Write("\r" + i + "/" + len + "  (" + cur + ":" + port + " -> LIVE)     ");
                     }
                     else
                     {
                         //dead ip
                         count++;
-                        IPs.RemoveAt(i);
-                        File.WriteAllLines(args[0], IPs.ToArray());
+                        IPs[i] = "REMOVED";
                         Console.Write("\r" + i + "/" + len + "  (" + cur + ":" + port + " -> DEAD)     ");
                     }
                 }
